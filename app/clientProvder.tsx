@@ -12,7 +12,7 @@ export default function ClientProvider({ children }: { children: React.ReactNode
           <h1 className="text-xl font-bold">My App</h1>
           <nav className="space-x-4">
             <Link href="/login">Login</Link>
-            <Link href="/signup">Sign Up</Link>
+            <Link href="/signup">SignUp</Link>
             <Link href="/dashboard">Dashboard</Link>
           </nav>
         </header>

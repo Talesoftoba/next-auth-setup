@@ -3,7 +3,7 @@ import ClientProvider from "./clientProvder";
 import "./globals.css";
 
 export const metadata = {
-  title: "My NextAuth App",
+  title: "My NextAuthApp.com",
   description: "Example app with login, signup, and dashboard",
 };
 
