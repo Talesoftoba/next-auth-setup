@@ -1,12 +1,8 @@
-import { db } from "./lib/db"; 
-
-export default async function Home() {
-  const users = await db.user.findMany();
-
+export default function HomePage() {
   return (
-    <main>
-      <h1>Users1</h1>
-      <pre>{JSON.stringify(users, null, 2)}</pre>
-    </main>
+    <div>
+      <h2 className="text-2xl font-bold">Welcome to My NextAuth App</h2>
+      <p>Use the navigation above to login, signup, or go to your dashboard.</p>
+    </div>
   );
 }
