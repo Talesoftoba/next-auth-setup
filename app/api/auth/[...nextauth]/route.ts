@@ -13,17 +13,19 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) return null;
+        if (!credentials?.email || !credentials?.password) return null;
 
         const user = await db.user.findUnique({
           where: { email: credentials.email.toLowerCase() },
         });
+        console.log("User authorize result:",user)
 
         if (!user || !user.password) return null;
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) return null;
 
+        // Return user object for NextAuth
         return { id: user.id, email: user.email };
       },
     }),
@@ -37,7 +39,23 @@ const handler = NextAuth({
   session: { strategy: "jwt" },
 
   callbacks: {
-    // Sign in callback for Google users
+    // This is the JWT callback (already in your code)
+    async jwt({ token, user }) {
+      console.log("JWT token:",token, "user:", user)
+      if (user) token.id = user.id; // attach user.id to the JWT token
+      return token;
+    },
+
+    // <-- Insert session callback here
+    async session({ session, token }) {
+      // Attach the user ID from JWT to the session object
+      if (session.user && token.id) {
+        session.user.id = token.id as string;
+      }
+      return session;
+    },
+
+    // Optional: signIn callback for Google users
     async signIn({ user, account }) {
       if (account?.provider === "google") {
         const existing = await db.user.findUnique({ where: { email: user.email! } });
@@ -46,30 +64,14 @@ const handler = NextAuth({
             data: {
               email: user.email!,
               name: user.name,
-              // password left null
             },
           });
         }
       }
       return true;
     },
-
-    // Add user ID to JWT
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
-    },
-
-    // Add user ID to session object
-    async session({ session, token }) {
-      if (token && session.user) {
-        session.user.id = token.id as string;
-      }
-      return session;
-    },
   },
 });
 
 export { handler as GET, handler as POST };
+
