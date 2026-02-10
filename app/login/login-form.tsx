@@ -9,7 +9,7 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
 
-  async function handleSubmit(e: React.SyntheticEvent <HTMLFormElement>) {
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
 
@@ -25,16 +25,63 @@ export default function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
-      {error && <p className="text-red-500">Invalid credentials</p>}
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-5 max-w-sm w-full"
+    >
+      {error && (
+        <p className="rounded-md bg-red-50 text-red-600 px-3 py-2 text-sm">
+          Invalid email or password
+        </p>
+      )}
 
-      <input name="email" type="email" required />
-      <input name="password" type="password" required />
+      {/* Email */}
+      <div className="space-y-1">
+        <label
+          htmlFor="email"
+          className="text-sm font-medium text-gray-700"
+        >
+          Email
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          placeholder="you@example.com"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                     focus:outline-none focus:ring-2 focus:ring-blue-500
+                     focus:border-blue-500"
+        />
+      </div>
 
+      {/* Password */}
+      <div className="space-y-1">
+        <label
+          htmlFor="password"
+          className="text-sm font-medium text-gray-700"
+        >
+          Password
+        </label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          required
+          placeholder="••••••••"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                     focus:outline-none focus:ring-2 focus:ring-blue-500
+                     focus:border-blue-500"
+        />
+      </div>
+
+      {/* Submit */}
       <button
         type="submit"
         disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+        className="w-full rounded-md bg-blue-600 px-4 py-2 text-white font-medium
+                   hover:bg-blue-700 transition
+                   disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? "Logging in..." : "Log in"}
       </button>
